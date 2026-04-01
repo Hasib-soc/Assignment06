@@ -1,121 +1,59 @@
-import { use, useState } from "react";
-import Card from "./Card";
-import { IoCartOutline } from "react-icons/io5";
+import React from 'react';
 
-const CardItems = ({ cardPromis, cart, handleAddToCart, handleRemove, handleCheckout }) => {
-    const data = use(cardPromis);
+const Card = ({ card, handleAddToCart }) => {
 
-    const [view, setView] = useState("products"); // 🔥 toggle
 
-    // total price
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
 
     return (
-        <div className="w-full md:w-4/5 mx-auto">
+        <div>
 
-            {/* Buttons */}
-            <div className="flex justify-center gap-3 my-5">
-                <button
-                    onClick={() => setView("products")}
-                    className={`btn rounded-full px-6 py-2 ${view === "products"
-                        ? "bg-gradient-to-r from-[#4F39F6] to-[#9514FA] text-white rounded-full"
-                        : "btn-outline"
-                        }`}
-                >
-                    Products
-                </button>
+            <div className="card w-96 bg-base-100 shadow-sm">
+                <div className="card-body">
 
-                <button
-                    onClick={() => setView("cart")}
-                    className={`btn rounded-full ${view === "cart"
-                        ? "bg-gradient-to-r from-[#4F39F6] to-[#9514FA] text-white rounded-full"
-                        : "btn-outline"
-                        }`}
-                >
-                    Cart({cart.length})
-                </button>
+                    <div className="relative w-full h-16">
+                        <span className="badge badge-xs badge-warning absolute top-0 right-0">{card.tag}</span>
+                        <span className="absolute left-0 top-6">{card.icon}</span>
+                    </div>
+
+                    <div >
+                        <h2 className="text-3xl font-bold">{card.name}</h2>
+                        <p className="mb-5">{card.description}</p>
+                        <span ><span className="text-2xl font-bold">${card.price}</span>/month</span>
+                    </div>
+
+                    <ul className="mt-6 flex flex-col gap-2 text-xs">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>{card.features[0]}</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>{card.features[1]}</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>{card.features[2]}</span>
+                        </li>
+
+                    </ul>
+                    <div className="mt-6">
+
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleAddToCart();
+                            }}
+                            className="btn bg-gradient-to-r from-[#4F39F6] to-[#9514FA] text-white font-bold btn-block rounded-full"
+                        >
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
             </div>
 
-
-
-            {view === "products" && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {data.map((card) => (
-                        <Card
-                            key={card.id}
-                            card={card}
-                            handleAddToCart={() => handleAddToCart(card)}
-                        />
-                    ))}
-                </div>
-            )}
-
-
-
-
-            {view === "cart" && (
-                <div className="p-4 border rounded-lg">
-
-                    <h1 className="text-2xl font-bold">Your Card</h1>
-
-                    {cart.length === 0 && (
-                        <div className="flex flex-col justify-center items-center h-40 text-gray-500">
-
-                            <IoCartOutline className="text-9xl mb-3" />
-
-                            <p className="text-4xl font-medium pb-10">
-                                Your Cart is Empty
-                            </p>
-
-                        </div>
-                    )}
-
-                    {cart.map((item) => (
-                        <div key={item.id} className="flex justify-between items-center rounded-xl shadow py-2">
-
-                            <div className="flex gap-5">
-                                <span>{item.icon}</span>
-                                <div className="flex flex-col">
-                                    <span>{item.name}</span>
-                                    <span>${item.price}</span>
-                                </div>
-                            </div>
-
-
-                            <button
-                                onClick={() => handleRemove(item.id)}
-                                className=" btn text-red-400 font-bold "
-                            >
-                                Remove
-                            </button>
-                        </div>
-                    ))}
-
-                    {/* Total */}
-
-
-
-                    {cart.length > 0 && (
-                        <div className=" flex justify-between mt-4 font-bold text-lg">
-                            <h1>Total</h1>
-                            <span>${total}</span>
-
-                        </div>
-                    )}
-
-
-                    {cart.length > 0 && (
-                        <button
-                            onClick={handleCheckout}
-                            className="btn bg-gradient-to-r from-[#4F39F6] to-[#9514FA] text-white font-bold btn-block rounded-full mt-4"
-                        >
-                            Checkout
-                        </button>
-                    )}
-                </div>
-            )}
-        </div>
+        </div >
     );
 };
 
-export default CardItems;
+export default Card;
